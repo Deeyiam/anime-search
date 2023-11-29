@@ -1,10 +1,10 @@
-import FilterArea from './Filter/FilterArea/filterOption'
-import { genre, alphabet } from './Interface/genreList and alphabetList'
-import GroupofDataShow from './DefaultLayout/GroupofDataShow'
+import SortOption from './Filter/SortArea/SortOption'
+import GetDataFromFilter from './FetchAPI/GetDataFromFilter'
+import { useState } from 'react'
+import FilterOption from './Filter/FilterArea/filterOption'
 
-type Props = {}
-
-const DefaultLayout = (props: Props) => {
+const overallScreen = () => {
+    const [currentUrl, setCurrentUrl] = useState<string>("https://api.jikan.moe/v4/anime?page=1&limit=9")
 
     return (
         <div>
@@ -20,34 +20,21 @@ const DefaultLayout = (props: Props) => {
                         <div className='grid justify-center items-center m-4'>Search </div>
                         <input className='grid justify-center m-4 text-center' type="text" id='searchName' placeholder='Type here' />
                         <div className='grid justify-center items-center m-4'>Filter by</div>
-                        <div className='grid grid-cols-2'>
-                            <FilterArea title={'Type'} options={["all", "TV", "movie", "ova", "special", "ona", "music"]} />
-                            <FilterArea title={'Score'} options={["all", "9+", "8+", "7+", "6+", "5+"]} />
-                            <FilterArea title={'Rating'} options={["all", "g", "pg", "pg13", "r17", "r", "rx"]} />
-                            <FilterArea title={'Status'} options={["all", "airing", "complete", "upcoming"]} />
-                            <FilterArea title={'Genre'} options={genre} />
-                            <FilterArea title={'Letter'} options={alphabet} />
-                            <button type='button' className='grid col-span-2 justify-center justify-self-center bg-red-500 w-[100px] mx-2 my-2 rounded-[20px] py-2 text-l'>Reset</button>
+                        <div className='grid'>
+                            <FilterOption setCurrentUrl={setCurrentUrl} />
                         </div>
                         <div className='grid justify-center items-center m-4 '>Sort by</div>
-                        <div className='grid grid-cols-2'>
-                            <button className='grid justify-center bg-yellow-200 mx-1 py-1 my-1 rounded-xl'>Title</button>
-                            <button className='grid justify-center bg-yellow-200 mx-1 py-1 my-1 rounded-xl'>Start Date</button>
-                            <button className='grid justify-center bg-yellow-200 mx-1 py-1 my-1 rounded-xl'>Score</button>
-                            <button className='grid justify-center bg-yellow-200 mx-1 py-1 my-1 rounded-xl'>Popularity</button>
-                            <button type='button' className='grid col-span-2 justify-center justify-self-center bg-red-500 w-[100px] mx-2 my-4 rounded-[20px] py-2 text-l'>Reset</button>
-                        </div>
-
+                        <SortOption setCurrentUrl={setCurrentUrl} />
                     </div>
 
 
-                    <div className='grid col-span-3 rounded-3xl mx-4 mr-6 self-start justify-center grid-cols-6 grid-rows-[3fr_3fr_3fr_1fr] h-[calc(100vh-96px)]'>
-                        <GroupofDataShow />
+                    <div className='grid col-span-3 rounded-3xl mx-4 mr-6 self-start justify-center grid-cols-6 grid-rows-[3fr_3fr_3fr_1fr] h-[calc(100vh-128px)]'>
+                        <GetDataFromFilter UrlSent={currentUrl} />
                         <div className='grid rounded-2xl m-4 col-span-6 h-8 grid-cols-[10fr_1fr_1fr_1fr_10fr]'>
                             <div></div>
-                            <button className='grid  justify-center bg-white hover:bg-green-200 w-[48px] p-2 rounded-lg'>Prev</button>
-                            <button className='grid justify-center bg-white hover:bg-green-200 w-[48px] p-2 rounded-lg'>1</button>
-                            <button className='grid justify-center bg-white hover:bg-green-200 w-[48px] p-2 rounded-lg'>Next</button>
+                            <button className='grid  bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l-xl'>Prev</button>
+                            <button className='grid bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4'>1</button>
+                            <button className='grid bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-r-xl'>Next</button>
                             <div></div>
                         </div>
                     </div>
@@ -57,4 +44,4 @@ const DefaultLayout = (props: Props) => {
     )
 }
 
-export default DefaultLayout
+export default overallScreen

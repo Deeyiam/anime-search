@@ -1,5 +1,5 @@
 export const genre = [
-    'All',
+    'all',
     'Action: 1',
     'Adventure: 2',
     'Cars: 3',

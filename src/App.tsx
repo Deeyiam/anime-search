@@ -1,5 +1,4 @@
 import DefaultLayout from './overallScreen';
-import GetDataFromFilter from './FetchAPI/GetDataFromFilter';
 
 
 
