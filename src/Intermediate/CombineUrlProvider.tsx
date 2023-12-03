@@ -5,70 +5,59 @@ type Props = {
     setCurrentUrl: React.Dispatch<React.SetStateAction<string>>
 }
 
-interface sortOption {
+type sortOption = {
     sortOption: string
 }
 
-interface filterOption {
+type filterOption = {
     filterOption: filteredOption
 }
 
-const CombineUrlProvider = (props: Props, sortOptions?: sortOption, filterOptions?: filterOption) => {
-    const [urlBase, setUrlBase] = useState<string>(`https://api.jikan.moe/v4/anime?page=1&limit=9`)
+
+const CombineUrlProvider = (props: Props, sortOptions: sortOption, filterOptions: filterOption) => {
+    const [sortOptionFinal, setSortOptionFinal] = useState<string>('')
+    const [filterOptionFinal, setFilterOptionFinal] = useState<string>('')
     const { setCurrentUrl } = props;
 
-    if (sortOptions) {
-        const { sortOption } = sortOptions
+    const { sortOption } = sortOptions
+    const { filterOption } = filterOptions
+    const lowerSelectedSort = sortOption?.toLowerCase()
 
-        const lowerSelectedSort = sortOption!.toLowerCase()
+    function setUrlBasefx(clickValue: string) {
+        if (clickValue == 'Reset') { setSortOptionFinal(`https://api.jikan.moe/v4/anime?page=1&limit=9`) }
+        else setSortOptionFinal(`https://api.jikan.moe/v4/anime?page=1&limit=9&order_by=${lowerSelectedSort}`)
 
-        function setUrlBasefx(clickValue: string) {
-            if (clickValue == 'Reset') {
-                setUrlBase(`https://api.jikan.moe/v4/anime?page=1&limit=9`)
-
-            }
-            else { setUrlBase(`https://api.jikan.moe/v4/anime?page=1&limit=9&order_by=${lowerSelectedSort}`) }
-
-        }
-        useEffect(() => {
-            setUrlBasefx(sortOption)
-                , [sortOption]
-        })
     }
+    useEffect(() => {
 
-    if (filterOptions) {
-        const { filterOption } = filterOptions
-        const [filterSelect, setFilterSelect] = useState<string>('')
+        setUrlBasefx(sortOptions.sortOption)
 
-        function setUrlBasefx2(clickValue: filteredOption) {
-            const filterMap = Object.entries!(clickValue);
-            const tempFilterMap = [];
-            for (let index = 0; index < filterMap.length; index++) {
-                if (filterMap[index][1] != "" && filterMap[index][1] != "all") {
-                    tempFilterMap.push(`${filterMap[index][0]}=${filterMap[index][1]}`)
-                }
 
+    }, [sortOptions.sortOption])
+
+
+    function setUrlBasefx2(clickValue: filteredOption) {
+        const filterMap = Object.entries!(clickValue);
+        const tempFilterMap = [];
+        for (let index = 0; index < filterMap.length; index++) {
+            if (filterMap[index][1] != "" && filterMap[index][1] != "all") {
+                tempFilterMap.push(`${filterMap[index][0]}=${filterMap[index][1]}`)
             }
-            setFilterSelect(tempFilterMap.join('&'));
 
         }
-
-        useEffect(() => {
-            setUrlBasefx2(filterOption)
-            console.log(filterSelect);
-
-            [filterOption]
-        })
-
+        setFilterOptionFinal(tempFilterMap.join('&'));
     }
 
     useEffect(() => {
 
-        setCurrentUrl(urlBase)
+        setUrlBasefx2(filterOption)
 
-    }, [urlBase])
+    }, [filterOption])
+
 
 }
+
+
 
 export default CombineUrlProvider
 

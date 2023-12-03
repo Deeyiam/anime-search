@@ -1,5 +1,6 @@
 import React, { createContext, useEffect, useState } from 'react'
 import CombineUrlProvider from '../../Intermediate/CombineUrlProvider';
+import FilterOption from '../FilterArea/filterOption';
 
 interface allcolorDefault {
     Title: boolean;
@@ -17,7 +18,6 @@ const allcolorDefault = sortOptions.reduce((a, v) => ({ ...a, [v]: false }), {})
 export const SelectedSort = createContext('Reset')
 
 const SortOption = (props: Props) => {
-    //const { setCurrentUrl } = props
     const [toOrange, setToOrange] = useState<allcolorDefault | {}>(allcolorDefault)
     const [sortedOption, setSortedOption] = useState<string>('Reset')
 
@@ -25,9 +25,7 @@ const SortOption = (props: Props) => {
         const clickValue: string = event.target.value
         const clickStyle = event.target.style
         colorChange(clickValue, clickStyle)
-        setSortedOption(clickValue)
-        //const newUrl = "https://api.jikan.moe/v4/anime?page=2&limit=9&"
-        //setCurrentUrl(newUrl)
+        setSortedOption(clickValue) //ตั้ง sort ตามตัวเลือกที่เลือก
     }
 
     function colorChange(clickValue: string, clickStyle: any) {
@@ -57,7 +55,7 @@ const SortOption = (props: Props) => {
         }
     }
 
-    CombineUrlProvider(props, { sortOption: sortedOption })
+    FilterOption(props, { sortOption: sortedOption })//เอา SortedOption ที่เป็น string ส่งเข้าหน้า Filter
 
     return (<div className='grid grid-cols-2'>
         {sortOptions.map((sortOption) => <button id={sortOption} key={sortOption} value={sortOption} className='grid justify-center mx-1 py-1 my-1 text-sm bg-yellow-200 font-medium text-gray-900 focus:outline-none rounded-full border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700'
