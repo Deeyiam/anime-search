@@ -74,7 +74,7 @@ const SortOption = (props: Props) => {
 
 
     return (<div className='grid grid-cols-2'>
-        {sortOptions.map((sortOption) => <button id={sortOption} key={sortOption} value={sortOption} className='grid justify-center mx-1 py-1 my-1 text-sm bg-yellow-200 font-medium text-gray-900 focus:outline-none rounded-full border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700'
+        {sortOptions.map((sortOption) => <button id={sortOption} key={sortOption} value={sortOption} className='grid col-span-2 lg:col-span-1 justify-center mx-6 lg:mx-1 py-1 my-1 text-sm bg-yellow-200 font-medium text-gray-900 focus:outline-none rounded-full border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700'
             onClick={handleClick}>{sortOption}</button>)}
         <button type='button' value='Reset' className='grid col-span-2 justify-center justify-self-center bg-red-500 w-[100px] mx-2 my-4 rounded-[20px] py-2 text-l hover:bg-red-300' onClick={handleClick}>Reset</button>
     </div>)

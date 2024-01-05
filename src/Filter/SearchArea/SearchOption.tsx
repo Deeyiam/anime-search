@@ -18,7 +18,7 @@ const SearchOption = (props: Props) => {
     }
 
     return (
-        <input className='grid justify-center m-4 text-center' type="text" id='searchName' placeholder='Type here' onChange={handleSearch} />
+        <input className='grid justify-center justify-self-center m-4 text-center w-5/6' type="text" id='searchName' placeholder='Type here' onChange={handleSearch} />
     )
 }
 

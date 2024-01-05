@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { extractData } from '../Interface/interfaceData'
 import { favList } from '../overallScreen'
 import BigContent from '../Additional/BigContent'
+import { startFavList } from './StartFavList'
 
 interface dataPlusFav {
     props: extractData,
@@ -11,7 +12,7 @@ interface dataPlusFav {
 
 const DataShowForOne = (dataPlusFav: dataPlusFav) => {
     const [loveSymbol, setLoveSymbol] = useState<string>('🤍')
-    const [favorite, setFavorite] = useState<string>('')
+    const [favorite, setFavorite] = useState<extractData>(startFavList)
     const { props, favList, setFavList } = dataPlusFav
     const [showBigContent, setShowBigContent] = useState<boolean>(false)
 
@@ -37,30 +38,33 @@ const DataShowForOne = (dataPlusFav: dataPlusFav) => {
         else return 'N/A'
     }
 
-    function favoriteSymbol(event: any) {
-        if (loveSymbol === '🤍' && favList.favArray.length < 7) {
-            setLoveSymbol('💗')
-            setFavorite(event.target.id)
+    function favoriteSymbol(props: extractData) {
+        if (loveSymbol === '🤍') {
+            if (favList.favArray.length < 7) {
+                setLoveSymbol('💗')
+                setFavorite(props)
+            }
+            else { alert('Favorite list is full. Please remove some first.') }
         }
         if (loveSymbol === '💗') {
             setLoveSymbol('🤍')
-            setFavorite(event.target.id)
+            setFavorite(props)
         }
 
     }
 
     function deleteSymbol(favList: favList) {
-        if (!favList.favArray.includes(props.title)) {
+        if (!favList.favArray.includes(props)) {
             setLoveSymbol('🤍')
-            setFavorite('')
+            setFavorite(startFavList)
         }
-        if (favList.favArray.includes(props.title)) {
+        if (favList.favArray.includes(props)) {
             setLoveSymbol('💗')
         }
 
     }
 
-    function deleteFavorite(whatToDel: string) {
+    function deleteFavorite(whatToDel: extractData) {
         const index = favList.favArray.findIndex(x => x == whatToDel)
         if (index != -1)
             setFavList({ favArray: [...favList.favArray.slice(0, index), ...favList.favArray.slice(index + 1)] })
@@ -70,8 +74,8 @@ const DataShowForOne = (dataPlusFav: dataPlusFav) => {
 
     useEffect(() => {
 
-        if (favorite != '' && !favList.favArray.includes(favorite) && favList.favArray.length < 7) { setFavList({ favArray: [...favList.favArray, favorite] }) }
-        else if (favorite != '' && favList.favArray.length < 8) { deleteFavorite(favorite) }
+        if (favorite.title != "string" && !favList.favArray.includes(favorite) && favList.favArray.length < 7) { setFavList({ favArray: [...favList.favArray, favorite] }) }
+        else if (favorite.title != "string" && favList.favArray.length < 8) { deleteFavorite(favorite) }
 
     }, [favorite, loveSymbol])
 
@@ -83,12 +87,12 @@ const DataShowForOne = (dataPlusFav: dataPlusFav) => {
 
     if (showBigContent) {
         return (
-            [<div className='grid bg-red-200 grid-cols-[7fr_13fr] rounded-2xl m-1 text-sm h-60' key='normal'>
-                <img className="bg-purple-200 rounded-l-2xl w-full h-60" src={props.images.jpg.large_image_url} alt="No Pic" />
-                <div className='grid m-2'>
+            [<div className='grid bg-red-200 grid-cols-[7fr_13fr] rounded-2xl m-1 h-60' >
+                <img className="bg-purple-200 rounded-l-2xl w-full h-60 hover:cursor-zoom-in" src={props.images.jpg.large_image_url} onClick={() => setShowBigContent(true)} alt="No Pic" />
+                <div className='grid m-2 text-sm 2xl:text-base overflow-y-auto'>
                     <div className='grid grid-cols-[8fr_1fr]'>
-                        <div className='grid font-semibold text-lg'>{props.title}</div>
-                        <button className='grid text-xl justify-end' id={props.title} onClick={favoriteSymbol} >{loveSymbol}</button >
+                        <div className='grid font-semibold '>{props.title}</div>
+                        <button className='grid text-lg justify-end' onClick={() => favoriteSymbol(props)} >{loveSymbol}</button >
                     </div>
                     <div>Type: {props.type}</div>
                     <div>Episodes: {props.episodes}</div>
@@ -96,7 +100,7 @@ const DataShowForOne = (dataPlusFav: dataPlusFav) => {
                     <div>Status: {props.status}</div>
                     <div>Genre: {props.genres.map((genre) => { return genre.name }).join(', ') || "Null"}</div>
                     <div>Rank: {props.rank}</div>
-                    <div className='grid grid-cols-2 '>
+                    <div className='grid grid-cols-[3fr_1fr] '>
                         <div>Start: {props.aired.prop.from.day}-{props.aired.prop.from.month}-{props.aired.prop.from.year}</div>
                         <div className='grid justify-end'>{checkScore(props.score)}⭐</div>
                     </div>
@@ -105,12 +109,12 @@ const DataShowForOne = (dataPlusFav: dataPlusFav) => {
             </div>, <BigContent fullData={props} setShowBigContent={setShowBigContent} key='big' />])
     }
 
-    else return (<div className='grid bg-red-200 grid-cols-[7fr_13fr] rounded-2xl m-1 text-sm h-60' >
+    else return (<div className='grid bg-red-200 grid-cols-[7fr_13fr] rounded-2xl m-1 h-60' >
         <img className="bg-purple-200 rounded-l-2xl w-full h-60 hover:cursor-zoom-in" src={props.images.jpg.large_image_url} onClick={() => setShowBigContent(true)} alt="No Pic" />
-        <div className='grid m-2'>
+        <div className='grid m-2 text-sm 2xl:text-base overflow-y-auto'>
             <div className='grid grid-cols-[8fr_1fr]'>
-                <div className='grid font-semibold text-lg'>{props.title}</div>
-                <button className='grid text-xl justify-end' id={props.title} onClick={favoriteSymbol} >{loveSymbol}</button >
+                <div className='grid font-semibold '>{props.title}</div>
+                <button className='grid text-lg justify-end' onClick={() => favoriteSymbol(props)} >{loveSymbol}</button >
             </div>
             <div>Type: {props.type}</div>
             <div>Episodes: {props.episodes}</div>
@@ -118,7 +122,7 @@ const DataShowForOne = (dataPlusFav: dataPlusFav) => {
             <div>Status: {props.status}</div>
             <div>Genre: {props.genres.map((genre) => { return genre.name }).join(', ') || "Null"}</div>
             <div>Rank: {props.rank}</div>
-            <div className='grid grid-cols-2 '>
+            <div className='grid grid-cols-[3fr_1fr] '>
                 <div>Start: {props.aired.prop.from.day}-{props.aired.prop.from.month}-{props.aired.prop.from.year}</div>
                 <div className='grid justify-end'>{checkScore(props.score)}⭐</div>
             </div>

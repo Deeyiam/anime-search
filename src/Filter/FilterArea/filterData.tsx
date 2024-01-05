@@ -1,13 +1,9 @@
-import { alphabet, genre } from "../../Interface/genreList and alphabetList";
+import { genre } from "../../Interface/genreList and alphabetList";
 
 export const filterData = [
     {
         title: 'Type',
         options: ["all", "TV", "movie", "ova", "special", "ona", "music"]
-    },
-    {
-        title: 'Scores',
-        options: ["all", "9+", "8+", "7+", "6+", "5+"]
     },
     {
         title: 'Rating',
@@ -20,9 +16,4 @@ export const filterData = [
     {
         title: 'Genre',
         options: genre
-    },
-    {
-        title: 'Letter',
-        options: alphabet
-    }
-]
+    }]

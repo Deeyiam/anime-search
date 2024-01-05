@@ -3,14 +3,12 @@ import { filterData } from "./filterData";
 import React from "react";
 import { currentUrl } from "../../overallScreen";
 
-
 export interface filteredOption {
     type: string,
-    min_score: string,
     rating: string,
     status: string,
     genres: string,
-    letter: string
+    min_score: number
 }
 
 
@@ -22,11 +20,10 @@ type Props = {
 
 export const filteredOptionStart = {
     type: '',
-    min_score: '',
     rating: '',
     status: '',
     genres: '',
-    letter: ''
+    min_score: 0,
 }
 
 function getOnlyNumber(genreEvent: string) {
@@ -42,7 +39,7 @@ const FilterOption = (props: Props) => {
     const { currentUrl, setCurrentUrl, setCurrentPage } = props
     const [filteredOption, setFilteredOption] = useState<filteredOption>(filteredOptionStart) //สร้าง object แยก filteroption
     const [filteredObli, setFilteredObli] = useState<string>('')
-
+    const [scoreRange, setScoreRange] = useState<number>(0)
 
     function capitalise(option: string) {
         return option.charAt(0).toUpperCase() + option.slice(1);
@@ -62,9 +59,6 @@ const FilterOption = (props: Props) => {
                 setFilteredOption({ ...filteredOption, 'type': event.target.value })
                 break;
 
-            case 'Scores':
-                setFilteredOption({ ...filteredOption, 'min_score': getOnlyNumber(event.target.value) })
-                break;
 
             case 'Rating':
                 setFilteredOption({ ...filteredOption, 'rating': event.target.value })
@@ -76,10 +70,6 @@ const FilterOption = (props: Props) => {
 
             case 'Genre':
                 setFilteredOption({ ...filteredOption, 'genres': getOnlyNumber(event.target.value) })
-                break;
-
-            case 'Letter':
-                setFilteredOption({ ...filteredOption, 'letter': event.target.value })
                 break;
 
             default:
@@ -120,10 +110,15 @@ const FilterOption = (props: Props) => {
         else { setCurrentUrl({ ...currentUrl, filterUrl: `&${filteredObli}` }) }
     }
 
+    function handleClick(event: any) {
+        setScoreRange(event.target.value);
+        setFilteredOption({ ...filteredOption, 'min_score': event.target.value })
+    }
+
     return (
         <div className="grid grid-cols-6 justify-center flex-row">
             {filterData.map((eachSelector: any) => {
-                return <div className="grid col-span-3 grid-cols-3" key={`div-${eachSelector.title}`} >
+                return <div className="grid col-span-6 xl:col-span-3 grid-cols-3" key={`div-${eachSelector.title}`} >
                     <label className='grid ml-2 items-center justify-center text-base' htmlFor={`${eachSelector.title}`} key={`label-${eachSelector.title}`} >{eachSelector.title}:</label>
                     <select className='grid justify-center ml-1 mr-5 my-1 col-span-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
                         onChange={handleFilter} id={`${eachSelector.title}`} key={`${eachSelector.title}`}>
@@ -133,10 +128,19 @@ const FilterOption = (props: Props) => {
                         })}
                     </select>
                 </div>
-            })}
-            <button type='button' className='grid justify-center justify-self-center bg-red-500 w-[100px] mx-2 my-2 rounded-[20px] py-2 text-l col-span-6' id="Reset" value="Reset"
-                onClick={
-                    (event) => { setFilteredOption(filteredOptionStart), handleFilter(event) }}>Reset</button>
+            }
+            )}
+            <div className="grid col-span-6 grid-cols-6 m-1">
+                <div className="grid col-span-6 grid-cols-6">
+                    <div className="grid col-span-1 self-center justify-self-center invisible lg:visible">Score</div>
+                    <input type="range" className="grid col-span-4" min="0" max="9" defaultValue='0' onClick={handleClick} />
+                    <div className=" justify-self-center">{scoreRange}</div>
+                </div>
+                <button type='button' className='grid justify-center justify-self-center bg-red-500 w-[100px] mx-2 my-2 rounded-[20px] py-2 text-l col-span-6' id="Reset" value="Reset"
+                    onClick={
+                        (event) => { setFilteredOption(filteredOptionStart), handleFilter(event) }}>Reset</button>
+
+            </div>
         </div>)
 }
 

@@ -5,7 +5,6 @@ import { extractData } from '../Interface/interfaceData';
 import DataShowForOne from '../DefaultLayout/DataShowForOne';
 import ReactLoading from 'react-loading';
 import { favList } from '../overallScreen';
-import BigContent from '../Additional/BigContent';
 
 interface Props {
     UrlSent: string
@@ -39,7 +38,7 @@ const GetDataFromFilter = (props: Props) => {
     if (!isLoading) {
         if (myData.length > 0) {
             return (
-                <div className="grid col-span-6 grid-cols-3" >
+                <div className="grid col-span-6 lg:grid-cols-3" >
                     {myData.map((eachData: extractData) =>
                         <DataShowForOne key={eachData.title} props={eachData} favList={favList} setFavList={setFavList} />)}
                 </div>)
