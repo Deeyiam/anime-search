@@ -82,7 +82,7 @@ const overallScreen = () => {
                             {favList.favArray.map((eachData: extractData) =>
                                 <DataShowForOne key={eachData.title} props={eachData} favList={favList} setFavList={setFavList} />)}
                         </div>
-                        <button className='grid rounded-2xl m-4 col-span-6 h-8 bg-red-300 items-center' onClick={() => setFavPage(false)}>Back</button>
+                        <button className='grid rounded-2xl m-4 col-span-6 h-8 bg-red-300 items-center' onClick={() => { setFavPage(false), setFavList({ favArray: [] }) }}>Back</button>
                     </div>
                 </div>
             </div >
